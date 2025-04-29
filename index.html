@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Color Cascade Cleaner</title>
+    <!-- Added Google Font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Color Cascade Cleaner</h1>
+        <div class="game-info">
+            <div id="score">Score: 0</div>
+            <div id="combo">Combo: x1</div>
+            <div id="lives">Lives: 3</div>
+        </div>
+        <!-- Added canvas-container for screen shake -->
+        <div id="canvas-container">
+             <canvas id="gameCanvas" width="600" height="800"></canvas>
+             <!-- Pause Overlay with no text -->
+             <div id="pauseOverlay" class="hidden"></div>
+        </div>
+        <div class="instructions">
+            Use Keys 1 (Red), 2 (Green), 3 (Blue) to change bin color
+            <br>Reach Combo x10 for FEVER MODE!
+            <br>Press 'P' or click Pause button to pause/resume.
+        </div>
+        <div class="game-controls">
+            <button id="startButton">Start Game</button>
+            <!-- Corrected closing tag -->
+            <button id="pauseButton" disabled>Pause</button>
+            <button id="openPerkShopButton">Perk Shop</button>
+        </div>
+        <div id="gameOver" class="hidden">
+            <h2>Game Over!</h2>
+            <div>Final Score: <span id="finalScore">0</span></div>
+            <div id="highScoreSection">
+                <h3>High Scores</h3>
+                <ul id="highScoreList">
+                    <li>Loading...</li>
+                </ul>
+            </div>
+            <button id="restartButton">Play Again</button>
+        </div>
+
+        <!-- Perk Shop Section (Initially Hidden) -->
+        <div id="perkShop" class="hidden">
+            <h2>Perk Shop</h2>
+            <div class="perk-info">
+                <span>Cascade Points (CP): <span id="cpDisplay">0</span></span>
+            </div>
+            <div id="perkList">
+                <!-- Perks will be populated here by script.js -->
+            </div>
+            <button id="closePerkShopButton">Close</button>
+        </div>
+        <!-- End Perk Shop Section -->
+
+        <!-- Audio Elements (Hidden) -->
+        <audio id="audioBGM" src="sounds/bgm.mp3" loop preload="auto"></audio>
+        <audio id="audioBGMFever" src="sounds/bgmFever.mp3" loop preload="auto"></audio>
+        <audio id="audioFeverStart" src="sounds/feverStart.wav" preload="auto"></audio>
+        <audio id="audioFeverEnd" src="sounds/feverEnd.wav" preload="auto"></audio>
+        <audio id="audioFeverCatch" src="sounds/feverCatch.wav" preload="auto"></audio>
+        <!-- End Audio Elements -->
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>

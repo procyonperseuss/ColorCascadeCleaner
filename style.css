@@ -1,0 +1,325 @@
+/* Import Google Font */
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+
+/* Define Color Palette */
+:root {
+    --bg-color: #f4f7f6;
+    --container-bg: #ffffff;
+    --text-dark: #333;
+    --text-light: #555;
+    --accent-color: #4CAF50; /* Green */
+    --accent-hover: #45a049;
+    --error-color: #f44336; /* Red */
+    --canvas-bg: #2c3e50; /* Dark blue-grey - restored to original */
+    --canvas-border: #1a252f; /* Restored original border color */
+    --bin-red: #e74c3c;
+    --bin-green: #2ecc71;
+    --bin-blue: #3498db;
+    --shadow-color: rgba(0, 0, 0, 0.1);
+    --fever-gold: #ffdd44; /* Added for fever mode */
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Poppins', sans-serif; /* Use Poppins font */
+    background-color: var(--bg-color);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    min-height: 100vh;
+    color: var(--text-dark);
+}
+
+.container {
+    text-align: center;
+    background-color: var(--container-bg);
+    padding: 30px; /* Increased padding */
+    border-radius: 15px; /* Smoother radius */
+    box-shadow: 0 5px 15px var(--shadow-color); /* Softer shadow */
+    max-width: 90%; /* Ensure it fits smaller screens */
+}
+
+h1 {
+    color: var(--text-dark);
+    margin-bottom: 25px;
+    font-weight: 600; /* Bolder title */
+}
+
+.game-info {
+    display: flex;
+    justify-content: space-around; /* Better spacing */
+    align-items: center;
+    margin-bottom: 10px; /* Slightly reduce bottom margin */
+    font-size: 1.3em; /* Slightly larger */
+    font-weight: 600;
+    color: var(--text-light);
+    padding: 10px;
+    background-color: #eee; /* Subtle background for info */
+    border-radius: 8px;
+}
+
+#score { color: var(--accent-color); }
+#lives { color: var(--error-color); }
+#combo { color: var(--bin-blue); } /* Style combo */
+
+/* Group main game control buttons */
+.game-controls {
+    margin-bottom: 15px;
+}
+
+/* Container for screen shake effect */
+#canvas-container {
+    position: relative; /* Needed for absolute positioning of overlay */
+    margin: 15px 0;
+    line-height: 0; /* Prevent extra space below canvas */
+}
+
+#gameCanvas {
+    border: 3px solid var(--canvas-border);
+    background-color: var(--canvas-bg);
+    display: block; /* Prevent inline spacing issues */
+    margin: 0 auto; /* Center if container is wider */
+    border-radius: 5px; /* Slightly rounded canvas */
+    position: relative; /* Needed for z-index interaction if any */
+    z-index: 1;
+}
+
+.instructions {
+    margin-top: 0; /* Reduce top margin as controls are above */
+    color: var(--text-light);
+    font-size: 0.95em;
+    line-height: 1.4; /* Improve readability for multi-line */
+}
+
+button {
+    background-color: var(--accent-color);
+    color: white;
+    border: none;
+    padding: 12px 25px; /* Larger padding */
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 1em; /* Relative font size */
+    font-weight: 600;
+    margin: 10px 5px;
+    cursor: pointer;
+    border-radius: 8px; /* Match container radius */
+    transition: background-color 0.2s ease-in-out, transform 0.1s ease; /* Smooth transitions */
+}
+
+button:hover {
+    background-color: var(--accent-hover);
+}
+
+button:active {
+    transform: scale(0.98); /* Click feedback */
+}
+
+/* Style for pause button specifically */
+#pauseButton {
+    background-color: var(--bin-blue); /* Blue like restart */
+}
+#pauseButton:hover:not(:disabled) { /* Only hover effect when enabled */
+     background-color: #2980b9;
+}
+#pauseButton:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+#gameOver {
+    margin-top: 25px;
+    padding: 25px;
+    background-color: rgba(255, 255, 255, 0.9); /* Slightly transparent */
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    transition: opacity 0.5s ease-in-out; /* Fade in/out */
+}
+
+#gameOver h2 {
+    color: var(--error-color);
+    margin-bottom: 10px;
+}
+
+#gameOver div {
+    font-size: 1.2em;
+    margin-bottom: 15px;
+    color: var(--text-dark);
+}
+
+#restartButton {
+    background-color: var(--bin-blue); /* Different color for restart */
+}
+#restartButton:hover {
+    background-color: #2980b9; /* Darker blue on hover */
+}
+
+.hidden {
+    display: none;
+    /* Opacity removed as we might toggle visibility directly */
+}
+
+/* Screen Shake Animation */
+@keyframes shake {
+  0%, 100% { transform: translateX(0); }
+  10%, 30%, 50%, 70%, 90% { transform: translateX(-5px); }
+  20%, 40%, 60%, 80% { transform: translateX(5px); }
+}
+
+.shake {
+  animation: shake 0.3s linear;
+}
+
+/* Perk Shop Styling */
+#perkShop {
+    margin-top: 30px;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #f9f9f9;
+    text-align: left; /* Align content left within the shop */
+}
+
+#perkShop h2 {
+    text-align: center; /* Center the heading */
+    margin-bottom: 15px;
+    color: var(--accent-color);
+}
+
+.perk-info {
+    text-align: center;
+    margin-bottom: 20px;
+    font-weight: 600;
+    font-size: 1.1em;
+}
+
+#perkList {
+    max-height: 300px; /* Limit height and allow scrolling */
+    overflow-y: auto;
+    margin-bottom: 20px;
+    padding-right: 10px; /* Space for scrollbar */
+}
+
+.perk-item {
+    background-color: #fff;
+    border: 1px solid #eee;
+    border-radius: 5px;
+    padding: 10px 15px;
+    margin-bottom: 10px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    opacity: 1;
+    transition: opacity 0.3s ease;
+}
+
+.perk-item.disabled {
+    opacity: 0.6;
+    background-color: #f0f0f0;
+}
+
+.perk-details h3 {
+    margin: 0 0 5px 0;
+    font-size: 1em;
+    color: var(--text-dark);
+}
+
+.perk-details p {
+    margin: 0;
+    font-size: 0.85em;
+    color: var(--text-light);
+}
+
+.perk-cost {
+    font-weight: 600;
+    color: var(--accent-color);
+    margin-right: 15px; /* Space before button */
+}
+
+.perk-item button {
+    padding: 5px 10px;
+    font-size: 0.9em;
+    min-width: 80px; /* Ensure buttons have minimum width */
+}
+
+.perk-item button:disabled {
+    background-color: #ccc;
+    cursor: not-allowed;
+}
+
+.perk-item .unlocked-text {
+    font-weight: 600;
+    color: var(--bin-green); /* Or another success color */
+}
+
+#closePerkShopButton {
+    display: block; /* Make it block level */
+    margin: 15px auto 0 auto; /* Center the close button */
+    background-color: var(--bin-red);
+}
+#closePerkShopButton:hover {
+     background-color: #c0392b;
+}
+
+/* Pause Overlay Style */
+#pauseOverlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.2); /* Lighter transparent overlay */
+    color: transparent; /* Hide text */
+    font-size: 0; /* Zero size text */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px; /* Match canvas */
+    z-index: 10; /* Ensure it's above the canvas */
+}
+
+/* High Score Styling */
+#highScoreSection {
+    margin-top: 20px;
+    padding-top: 15px;
+    border-top: 1px solid #eee;
+    text-align: center;
+}
+
+#highScoreSection h3 {
+    margin-bottom: 10px;
+    color: var(--text-dark);
+}
+
+#highScoreList {
+    list-style: none; /* Remove default bullets */
+    padding: 0;
+    margin: 0 auto; /* Center the list */
+    max-width: 300px; /* Limit width */
+    text-align: left; /* Align text within list items */
+}
+
+#highScoreList li {
+    background-color: #f9f9f9;
+    border: 1px solid #eee;
+    padding: 8px 12px;
+    margin-bottom: 5px;
+    border-radius: 4px;
+    display: flex;
+    justify-content: space-between;
+    font-size: 0.95em;
+}
+
+#highScoreList li span:first-child { /* Rank/Score */
+    font-weight: 600;
+}
+
+#highScoreList li span:last-child { /* Date */
+    color: var(--text-light);
+    font-size: 0.9em;
+}
